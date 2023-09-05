@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iqshan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        form {
+            margin: 20px auto;
+            max-width: 300px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Absen Shalat Jamaah</h1>
+    <form id="form-jamaah">
+        <label for="nama">Nama Siswa:</label>
+        <input type="text" id="nama" name="nama" required>
+
+        <label for="shalat">Jamaah Shalat:</label>
+        <input type="text" id="shalat" name="shalat" required>
+
+        <button type="submit">Simpan</button>
+    </form>
+
+    <h2>Daftar Siswa yang Berjamaah Shalat:</h2>
+    <ul id="daftar-siswa">
+        <!-- Daftar siswa akan ditampilkan di sini -->
+    </ul>
+
+    <button id="export-csv">Export CSV</button>
+
+    <script>
+        const form = document.getElementById("form-jamaah");
+        const daftarSiswa = document.getElementById("daftar-siswa");
+        const exportButton = document.getElementById("export-csv");
+
+        const dataSiswa = [];
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const nama = document.getElementById("nama").value;
+            const shalat = document.getElementById("shalat").value;
+
+            const listItem = document.createElement("li");
+            listItem.textContent = `${nama} - Berjamaah Shalat: ${shalat}`;
+            daftarSiswa.appendChild(listItem);
+
+            // Tambahkan data siswa ke array
+            dataSiswa.push([nama, shalat]);
+
+            // Bersihkan input
+            document.getElementById("nama").value = "";
+            document.getElementById("shalat").value = "";
+        });
+
+        exportButton.addEventListener("click", function() {
+            // Buat data CSV dari array dataSiswa
+            const csvContent = "data:text/csv;charset=utf-8," + dataSiswa.map(e => e.join(",")).join("\n");
+
+            // Buat elemen anchor untuk mengunduh file CSV
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "data_siswa.csv");
+            document.body.appendChild(link);
+            link.click();
+        });
+    </script>
+</body>
+
+</html>
